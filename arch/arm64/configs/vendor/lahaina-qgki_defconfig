@@ -4,11 +4,11 @@
 #
 
 #
-# Compiler: Neutron clang version 17.0.0 (https://github.com/llvm/llvm-project.git d8e9a1a12557cd5e80c3d713d9cbbba0f7406882)
+# Compiler: Neutron clang version 17.0.0 (https://github.com/llvm/llvm-project.git 9aae408d551083bbbac96ecc512d45c30358e4b9)
 #
 CONFIG_OPLUS_SYSTEM_KERNEL_QCOM=y
 # CONFIG_OPLUS_SYSTEM_KERNEL_MTK is not set
-CONFIG_CC_VERSION_TEXT="Neutron clang version 17.0.0 (https://github.com/llvm/llvm-project.git d8e9a1a12557cd5e80c3d713d9cbbba0f7406882)"
+CONFIG_CC_VERSION_TEXT="Neutron clang version 17.0.0 (https://github.com/llvm/llvm-project.git 9aae408d551083bbbac96ecc512d45c30358e4b9)"
 CONFIG_GCC_VERSION=0
 CONFIG_CC_IS_CLANG=y
 CONFIG_LD_IS_LLD=y
@@ -5208,7 +5208,7 @@ CONFIG_QCOM_SMEM=y
 # CONFIG_QCOM_SMD_RPM is not set
 # CONFIG_MSM_SPM is not set
 # CONFIG_MSM_L2_SPM is not set
-CONFIG_QCOM_MEMORY_DUMP_V2=y
+# CONFIG_QCOM_MEMORY_DUMP_V2 is not set
 CONFIG_QCOM_SMEM_STATE=y
 CONFIG_QCOM_SMP2P=y
 CONFIG_QCOM_SMSM=y
