@@ -1528,7 +1528,7 @@ static int fts_enable_black_gesture(struct chip_data_ft3658u *ts_data,
 {
 	int i = 0;
 	int ret = 0;
-	int config1 = 0xff;
+	int config1 = 0x50;
 	int state = ts_data->gesture_state;
 
 	SET_FTS_GESTURE(state, DOU_TAP, config1, 4);
