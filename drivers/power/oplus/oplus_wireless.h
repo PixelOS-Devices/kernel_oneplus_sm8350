@@ -565,6 +565,7 @@ struct oplus_chg_auth_result {
 	struct gauge_auth_result rst_k0;
 	struct gauge_auth_result rst_k1;
 	struct wls_auth_result wls_auth_data;
+	struct gauge_auth_result rst_k2;
 };
 #endif /*SUPPORT_OPLUS_WPC_VERIFY*/
 

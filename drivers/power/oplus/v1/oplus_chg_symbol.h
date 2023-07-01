@@ -44,6 +44,7 @@
 #define set_rtc_spare_oplus_fg_value set_rtc_spare_oplus_fg_value_v1
 #define is_meta_mode is_meta_mode_v1
 #define oplus_tchg_01c_precision oplus_tchg_01c_precision_v1
+#define oplus_force_get_subboard_temp oplus_force_get_subboard_temp_v1
 
 #endif /* CONFIG_OPLUS_CHARGER_MTK6895S */
 

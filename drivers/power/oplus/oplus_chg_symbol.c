@@ -114,6 +114,9 @@ ADD_FUNC_BODY(is_meta_mode)
 DEF_SYMBOLE(bool, oplus_tchg_01c_precision, void)
 ADD_FUNC_BODY(oplus_tchg_01c_precision)
 
+DEF_SYMBOLE(int, oplus_force_get_subboard_temp, void)
+ADD_FUNC_BODY(oplus_force_get_subboard_temp)
+
 #endif /* CONFIG_OPLUS_CHARGER_MTK6895S */
 
 static int __init oplus_chg_symbol_init(void)

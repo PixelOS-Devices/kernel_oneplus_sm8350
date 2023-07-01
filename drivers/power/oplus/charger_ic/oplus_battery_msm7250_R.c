@@ -9134,7 +9134,8 @@ int oplus_chg_enable_qc_detect(void)
 		return -1;
 	}
 
-        if (is_vooc_support_single_batt_svooc() == false) {
+        if (is_vooc_support_single_batt_svooc() == false &&
+	    oplus_charger_ic_chip_is_null()) {
                 return 0;
         }
 

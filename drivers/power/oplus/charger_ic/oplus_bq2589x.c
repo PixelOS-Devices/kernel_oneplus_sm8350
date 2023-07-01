@@ -2870,7 +2870,7 @@ void vol_convert_work(struct work_struct *work)
 				icharging = 500;
 			}
 
-			/*Fix 11V3A oplus charger can't change to 9V after back to normal temperature.*/
+			/*Fix 11V3A oppo charger can't change to 9V after back to normal temperature.*/
 			chg_info("wait charger respond");
 			oplus_bq2589x_set_ichg(100);
 			msleep(1500);

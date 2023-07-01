@@ -462,7 +462,7 @@ int mtk_chr_is_charger_exist(unsigned char *exist)
 void oplus_set_otg_switch_status(bool value)
 {
 	if (pinfo != NULL ) {
-		printk(KERN_ERR "[OPLUS_CHG][%s]: otg switch[%d]\n", __func__, value);
+		printk(KERN_ERR "[OPPO_CHG][%s]: otg switch[%d]\n", __func__, value);
 		musb_ctrl_host(value);
 	}
 }
@@ -1325,7 +1325,7 @@ static bool oplus_usbtemp_check_is_support(void)
 static int oplus_dischg_gpio_init(struct oplus_chg_chip *chip)
 {
        if (!chip) {
-               chg_err("oplus_chip not ready!\n");
+               chg_err("oppo_chip not ready!\n");
                return -EINVAL;
        }
 

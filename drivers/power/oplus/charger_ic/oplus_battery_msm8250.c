@@ -7945,6 +7945,13 @@ static void typec_src_removal(struct smb_charger *chg)
 
 static void typec_mode_unattached(struct smb_charger *chg)
 {
+	int rc, input_present;
+
+	rc = smblib_is_input_present(chg, &input_present);
+	if(input_present & INPUT_PRESENT_USB) {
+		pr_err("vbus presence, not set icl\n");
+		return;
+	}
 	vote(chg->usb_icl_votable, SW_ICL_MAX_VOTER, true, USBIN_100MA);
 }
 

@@ -616,7 +616,7 @@ static void oplus_voocphy_enable_check_func(struct work_struct *work)
 #ifdef OPLUS_CHG_UNDEF
 static void oplus_wait_wired_charge_on_work(struct work_struct *work)
 {
-	printk(KERN_ERR "[OPLUS_CHG][%s]<~WPC~> wait_wired_charge_on\n", __func__);
+	printk(KERN_ERR "[OPPO_CHG][%s]<~WPC~> wait_wired_charge_on\n", __func__);
 	oplus_wpc_set_wrx_en_value(0);
 	oplus_wpc_set_wls_pg_value(1);
 	msleep(100);
@@ -650,7 +650,7 @@ static void oplus_switch_to_wired_charge(struct battery_chg_dev *bcdev)
 
 static void oplus_wait_wired_charge_off_work(struct work_struct *work)
 {
-	printk(KERN_ERR "[OPLUS_CHG][%s]<~WPC~> wait_wired_charge_off\n", __func__);
+	printk(KERN_ERR "[OPPO_CHG][%s]<~WPC~> wait_wired_charge_off\n", __func__);
 	oplus_wpc_dis_wireless_chg(0);
 	oplus_wpc_set_rtx_function_prepare();
 	oplus_wpc_set_rtx_function(true);
@@ -2393,7 +2393,7 @@ static void oplus_vchg_trig_irq_init(struct battery_chg_dev *bcdev)
 	}
 
 	bcdev->vchg_trig_irq = gpio_to_irq(bcdev->oplus_custom_gpio.vchg_trig_gpio);
-	printk(KERN_ERR "[OPLUS_CHG][%s]: vchg_trig_irq[%d]!\n", __func__, bcdev->vchg_trig_irq);
+	printk(KERN_ERR "[OPPO_CHG][%s]: vchg_trig_irq[%d]!\n", __func__, bcdev->vchg_trig_irq);
 }
 
 #define VCHG_TRIG_DELAY_MS	50
@@ -2402,7 +2402,7 @@ irqreturn_t oplus_vchg_trig_change_handler(int irq, void *data)
 	struct battery_chg_dev *bcdev = data;
 
 	cancel_delayed_work_sync(&bcdev->vchg_trig_work);
-	printk(KERN_ERR "[OPLUS_CHG][%s]: scheduling vchg_trig work!\n", __func__);
+	printk(KERN_ERR "[OPPO_CHG][%s]: scheduling vchg_trig work!\n", __func__);
 	schedule_delayed_work(&bcdev->vchg_trig_work, msecs_to_jiffies(VCHG_TRIG_DELAY_MS));
 
 	return IRQ_HANDLED;

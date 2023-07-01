@@ -448,6 +448,8 @@ struct batt_sys_curve {
 
 #define DUMP_REG_CNT 49
 
+#define COOL_DOWN_NUM_MAX	32
+
 struct batt_sys_curves {
 	struct batt_sys_curve batt_sys_curve[BATT_SYS_ROW_MAX];
 	unsigned char sys_curv_num;
@@ -489,6 +491,7 @@ struct oplus_voocphy_manager {
 	bool external_gauge_support;
 	bool version_judge_support;
 	bool impedance_calculation_newmethod;
+	bool record_fastchg_end_soc;
 
 	unsigned char voocphy_rx_buff;
 	unsigned char voocphy_tx_buff[VOOCPHY_TX_LEN];
@@ -563,13 +566,14 @@ struct oplus_voocphy_manager {
 	unsigned char adapter_model_ver;
 	unsigned char adapter_model_count; //obtain adapter_model need times
 	unsigned char ask_batt_sys; //batt_sys
-	unsigned int svooc_cool_down_current_limit[16];
+	unsigned int svooc_cool_down_current_limit[COOL_DOWN_NUM_MAX];
 	unsigned int svooc_cool_down_num;
-	unsigned int vooc_cool_down_current_limit[16];
+	unsigned int vooc_cool_down_current_limit[COOL_DOWN_NUM_MAX];
 	unsigned int vooc_cool_down_num;
 	unsigned int current_default;
 	unsigned int current_expect;
 	unsigned int current_max;
+	unsigned int current_spec;
 	unsigned int current_ap;
 	unsigned int current_batt_temp;
 	unsigned char ap_need_change_current;
@@ -602,6 +606,9 @@ struct oplus_voocphy_manager {
 	int current_pwd;			   /* copycat adapter current thd */
 	unsigned int curr_pwd_count;		   //count for	ccopycat adapter is ornot
 	bool copycat_icheck;
+
+	unsigned int svooc_circuit_r_l;
+	unsigned int svooc_circuit_r_h;
 
 	unsigned int slave_cp_enable_thr;
 	unsigned int slave_cp_disable_thr_high;
@@ -663,6 +670,7 @@ struct oplus_voocphy_manager {
 	struct delayed_work modify_cpufeq_work;
 	struct delayed_work voocphy_check_charger_out_work;
 	struct delayed_work check_chg_out_work;
+	struct delayed_work clear_boost_work;
 	atomic_t  voocphy_freq_state;
 	int voocphy_freq_mincore;
 	int voocphy_freq_midcore;
@@ -700,6 +708,7 @@ struct oplus_voocphy_manager {
 	int irq_hw_timeout_num;
 
 	int irq_rxdone_num;
+	int irq_tx_fail_num;
 
 	int batt_fake_temp;
 	int batt_fake_soc;
@@ -779,6 +788,7 @@ struct oplus_voocphy_manager {
 	bool cp_err_uploading;
 	oplus_chg_track_trigger *cp_err_load_trigger;
 	struct delayed_work cp_err_load_trigger_work;
+	bool high_curr_setting;
 };
 
 struct oplus_voocphy_operations {
@@ -811,6 +821,7 @@ struct oplus_voocphy_operations {
 	int (*clear_interrupts)(struct oplus_voocphy_manager *chip);
 	int (*get_voocphy_enable)(struct oplus_voocphy_manager *chip, u8 *data);
 	void (*dump_voocphy_reg)(struct oplus_voocphy_manager *chip);
+	int (*set_dpdm_enable)(struct oplus_voocphy_manager *chip, bool enable);
 };
 
 #define VOOCPHY_LOG_BUF_LEN 1024
@@ -891,4 +902,7 @@ void oplus_voocphy_get_chip(struct oplus_voocphy_manager **chip);
 void oplus_voocphy_dump_reg(void);
 bool oplus_voocphy_get_detach_unexpectly(void);
 void oplus_voocphy_set_detach_unexpectly(bool val);
+int oplus_voocphy_enter_ship_mode(void);
+int oplus_voocphy_adjust_current_by_cool_down(int val);
+bool oplus_voocphy_get_btb_temp_over(void);
 #endif /* _OPLUS_VOOCPHY_H_ */

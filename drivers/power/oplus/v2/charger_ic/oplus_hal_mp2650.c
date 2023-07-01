@@ -2625,7 +2625,7 @@ static ssize_t mp2650_data_log_write(struct file *filp, const char __user *buff,
 	int critical_log = 0;
 	int rc;
 
-	if (len >= sizeof(write_data)) {
+	if ((len >= sizeof(write_data)) || (len == 0)) {
 		return -EINVAL;
 	}
 
