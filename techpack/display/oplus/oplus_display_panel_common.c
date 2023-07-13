@@ -26,6 +26,9 @@ EXPORT_SYMBOL(oplus_debug_max_brightness);
 EXPORT_SYMBOL(oplus_dither_enable);
 #endif
 
+uint64_t serial_number0 = 0x0;
+uint64_t serial_number1 = 0x0;
+
 extern int dsi_display_read_panel_reg(struct dsi_display *display, u8 cmd,
 				      void *data, size_t len);
 extern int oplus_display_audio_ready;
@@ -171,6 +174,23 @@ int oplus_display_panel_get_oplus_max_brightness(void *buf)
 	return 0;
 }
 
+int oplus_display_panel_get_lcd_max_brightness(void *buf)
+{
+	uint32_t *lcd_max_backlight = buf;
+	int panel_id = (*lcd_max_backlight >> 12);
+	struct dsi_display *display = get_main_display();
+	if (panel_id == 1)
+		display = get_sec_display();
+
+	(*lcd_max_backlight) = display->panel->bl_config.bl_max_level;
+
+	DSI_INFO("[%s] get lcd max backlight: %d\n",
+			display->panel->oplus_priv.vendor_name,
+			*lcd_max_backlight);
+
+	return 0;
+}
+
 int oplus_display_panel_get_brightness(void *buf)
 {
 	uint32_t *brightness = buf;
@@ -190,6 +210,33 @@ int oplus_display_panel_get_brightness(void *buf)
 		(*brightness) = display->panel->bl_config.bl_level;
 	}
 	return 0;
+}
+
+int oplus_display_panel_set_brightness(void *buf)
+{
+	int rc = 0;
+	struct dsi_display *display = get_main_display();
+	struct dsi_panel *panel = NULL;
+	uint32_t *backlight = buf;
+
+	if (!display || !display->drm_conn || !display->panel) {
+		DSI_ERR("Invalid display params\n");
+		return -EINVAL;
+	}
+	panel = display->panel;
+
+	if (*backlight > panel->bl_config.bl_max_level ||
+			*backlight < 0) {
+		DSI_WARN("[%s] falied to set backlight: %d, it is out of range!\n",
+				__func__, *backlight);
+		return -EFAULT;
+	}
+
+	DSI_INFO("[%s] set backlight: %d\n", panel->oplus_priv.vendor_name, *backlight);
+
+	rc = dsi_display_set_backlight(display->drm_conn, display, *backlight);
+
+	return rc;
 }
 
 int oplus_display_panel_get_vendor(void *buf)
@@ -213,8 +260,8 @@ int oplus_display_panel_get_vendor(void *buf)
 	vendor = (char *)display->panel->oplus_priv.vendor_name;
 	manu_name = (char *)display->panel->oplus_priv.manufacture_name;
 
-	memcpy(p_info->version, vendor, strlen(vendor) > 31?31:(strlen(vendor)+1));
-	memcpy(p_info->manufacture, manu_name, strlen(manu_name) > 31?31:(strlen(manu_name)+1));
+	memcpy(p_info->version, vendor, strlen(vendor) >= 31?31:(strlen(vendor)+1));
+	memcpy(p_info->manufacture, manu_name, strlen(manu_name) >= 31?31:(strlen(manu_name)+1));
 
 	return 0;
 }
@@ -271,38 +318,38 @@ int oplus_display_panel_get_ccd_check(void *buf)
 	}
 
 	if (!strcmp(display->panel->oplus_priv.vendor_name, "AMB655UV01")) {
-		{
+		 {
 			char value[] = { 0x5A, 0x5A };
 			rc = mipi_dsi_dcs_write(mipi_device, 0xF0, value, sizeof(value));
-		}
-		{
+		 }
+		 {
 			char value[] = { 0x44, 0x50 };
 			rc = mipi_dsi_dcs_write(mipi_device, 0xE7, value, sizeof(value));
-		}
+		 }
 		usleep_range(1000, 1100);
-		{
+		 {
 			char value[] = { 0x03 };
 			rc = mipi_dsi_dcs_write(mipi_device, 0xB0, value, sizeof(value));
-		}
+		 }
 
 	} else {
-		{
+		 {
 			char value[] = { 0x5A, 0x5A };
 			rc = mipi_dsi_dcs_write(mipi_device, 0xF0, value, sizeof(value));
-		}
-		{
+		 }
+		 {
 			char value[] = { 0x02 };
 			rc = mipi_dsi_dcs_write(mipi_device, 0xB0, value, sizeof(value));
-		}
-		{
+		 }
+		 {
 			char value[] = { 0x44, 0x50 };
 			rc = mipi_dsi_dcs_write(mipi_device, 0xCC, value, sizeof(value));
-		}
+		 }
 		usleep_range(1000, 1100);
-		{
+		 {
 			char value[] = { 0x05 };
 			rc = mipi_dsi_dcs_write(mipi_device, 0xB0, value, sizeof(value));
-		}
+		 }
 	}
 
 	if (display->config.panel_mode == DSI_OP_CMD_MODE) {
@@ -316,24 +363,24 @@ int oplus_display_panel_get_ccd_check(void *buf)
 	mutex_unlock(&display->display_lock);
 
 	if (!strcmp(display->panel->oplus_priv.vendor_name, "AMB655UV01")) {
-		{
+		 {
 			unsigned char read[10];
 
 			rc = dsi_display_read_panel_reg(display, 0xE1, read, 1);
 
 			pr_err("read ccd_check value = 0x%x rc=%d\n", read[0], rc);
 			(*ccd_check) = read[0];
-		}
+		 }
 
 	} else {
-		{
+		 {
 			unsigned char read[10];
 
 			rc = dsi_display_read_panel_reg(display, 0xCC, read, 1);
 
 			pr_err("read ccd_check value = 0x%x rc=%d\n", read[0], rc);
 			(*ccd_check) = read[0];
-		}
+		 }
 	}
 
 	mutex_lock(&display->display_lock);
@@ -356,10 +403,10 @@ int oplus_display_panel_get_ccd_check(void *buf)
 				     DSI_CORE_CLK, DSI_CLK_ON);
 	}
 
-	{
+	 {
 		char value[] = { 0xA5, 0xA5 };
 		rc = mipi_dsi_dcs_write(mipi_device, 0xF0, value, sizeof(value));
-	}
+	 }
 
 	if (display->config.panel_mode == DSI_OP_CMD_MODE) {
 		rc = dsi_display_clk_ctrl(display->dsi_clk_handle,
@@ -391,8 +438,9 @@ int oplus_display_panel_get_serial_number(void *buf) {
 	int panel_id = panel_rnum->serial_number[0];
 
 	pr_info("%s panel_id = %d\n", __func__, panel_id);
-	if (!display) {
-		printk(KERN_INFO "oplus_display_get_panel_serial_number and main display is null");
+	if (!display || !display->panel) {
+		printk(KERN_INFO
+			"oplus_display_get_panel_serial_number and main display is null");
 		return -1;
 	}
 
@@ -418,31 +466,54 @@ int oplus_display_panel_get_serial_number(void *buf) {
 		return ret;
 	}
 
+	if (!display->panel->panel_initialized) {
+		printk(KERN_ERR"%s  panel initialized = false\n", __func__);
+		return ret;
+	}
+	/*
+	* To fix bug id 5552142, we do not read serial number frequently.
+	* First read, then return the saved value.
+	*/
+	if (1 == panel_id) {
+		if (serial_number1 != 0) {
+			ret = scnprintf(panel_rnum->serial_number, PAGE_SIZE, "Get panel serial number: %llx\n",
+							serial_number1);
+			pr_info("%s read serial_number1 0x%x\n", __func__, serial_number1);
+			return ret;
+		}
+	} else {
+		if (serial_number0 != 0) {
+			ret = scnprintf(panel_rnum->serial_number, PAGE_SIZE, "Get panel serial number: %llx\n",
+							serial_number0);
+			pr_info("%s read serial_number0 0x%x\n", __func__, serial_number0);
+			return ret;
+		}
+	}
+
 	/*
 	 * for some unknown reason, the panel_serial_info may read dummy,
 	 * retry when found panel_serial_info is abnormal.
 	 */
-	for (i = 0;i < 10; i++) {
+	for (i = 0;i < 5; i++) {
 		if(!strcmp(display->panel->oplus_priv.vendor_name, "S6E3XA1")
 			|| !strcmp(display->panel->name, "samsung AMS643YE01 dsc cmd mode panel")
 			|| !strcmp(display->panel->name, "samsung ams662zs01 dvt dsc cmd mode panel")) {
 			mutex_lock(&display->display_lock);
 			mutex_lock(&display->panel->panel_lock);
 
-			if (display->panel->panel_initialized) {
-				if (display->config.panel_mode == DSI_OP_CMD_MODE) {
-					dsi_display_clk_ctrl(display->dsi_clk_handle,
-							DSI_ALL_CLKS, DSI_CLK_ON);
-				}
-				 {
-					char value[] = { 0x5A, 0x5A };
-					ret = mipi_dsi_dcs_write(&display->panel->mipi_device, 0xF0, value, sizeof(value));
-				 }
-				if (display->config.panel_mode == DSI_OP_CMD_MODE) {
-					dsi_display_clk_ctrl(display->dsi_clk_handle,
-							DSI_ALL_CLKS, DSI_CLK_OFF);
-				}
+			if (display->config.panel_mode == DSI_OP_CMD_MODE) {
+				dsi_display_clk_ctrl(display->dsi_clk_handle,
+						DSI_ALL_CLKS, DSI_CLK_ON);
 			}
+			 {
+				char value[] = { 0x5A, 0x5A };
+				ret = mipi_dsi_dcs_write(&display->panel->mipi_device, 0xF0, value, sizeof(value));
+			 }
+			if (display->config.panel_mode == DSI_OP_CMD_MODE) {
+				dsi_display_clk_ctrl(display->dsi_clk_handle,
+						DSI_ALL_CLKS, DSI_CLK_OFF);
+			}
+
 			mutex_unlock(&display->panel->panel_lock);
 			mutex_unlock(&display->display_lock);
 
@@ -452,11 +523,13 @@ int oplus_display_panel_get_serial_number(void *buf) {
 				msleep(20);
 				continue;
 			}
+			pr_info("%s read panel:%s\n", __func__, display->panel->oplus_priv.vendor_name);
 			ret = dsi_display_read_panel_reg(display, 0xD8, read, 22);
 		} else {
 			if (!strcmp(display->panel->oplus_priv.vendor_name, "S6E3HC3")) {
 				ret = dsi_display_read_panel_reg(display, 0xA1, read, 11);
 			} else if (!strcmp(display->panel->oplus_priv.vendor_name, "NT37701")) {
+				pr_info("%s read panel:%s\n", __func__, display->panel->oplus_priv.vendor_name);
 				ret = dsi_display_read_panel_reg(display, 0xA3, read, 8);
 			} else if (!strcmp(display->panel->name, "samsung amb655x fhd cmd mode dsc dsi panel")
 				|| !strcmp(display->panel->name, "samsung SOFE03F dsc cmd mode panel")) {
@@ -466,16 +539,16 @@ int oplus_display_panel_get_serial_number(void *buf) {
 
 				mutex_lock(&display->display_lock);
 				mutex_lock(&display->panel->panel_lock);
-				if (display->panel->panel_initialized) {
-					if (display->config.panel_mode == DSI_OP_CMD_MODE) {
-						dsi_display_clk_ctrl(display->dsi_clk_handle, DSI_ALL_CLKS, DSI_CLK_ON);
-					}
 
-					ret = mipi_dsi_dcs_write(&display->panel->mipi_device, 0xF0, panel_info_page, sizeof(panel_info_page));
-					if (display->config.panel_mode == DSI_OP_CMD_MODE) {
-						dsi_display_clk_ctrl(display->dsi_clk_handle, DSI_ALL_CLKS, DSI_CLK_OFF);
-					}
+				if (display->config.panel_mode == DSI_OP_CMD_MODE) {
+					dsi_display_clk_ctrl(display->dsi_clk_handle, DSI_ALL_CLKS, DSI_CLK_ON);
 				}
+
+				ret = mipi_dsi_dcs_write(&display->panel->mipi_device, 0xF0, panel_info_page, sizeof(panel_info_page));
+				if (display->config.panel_mode == DSI_OP_CMD_MODE) {
+					dsi_display_clk_ctrl(display->dsi_clk_handle, DSI_ALL_CLKS, DSI_CLK_OFF);
+				}
+
 				mutex_unlock(&display->panel->panel_lock);
 				mutex_unlock(&display->display_lock);
 
@@ -545,6 +618,12 @@ int oplus_display_panel_get_serial_number(void *buf) {
 			}
 			ret = scnprintf(panel_rnum->serial_number,
 				PAGE_SIZE, "Get panel serial number: %llx\n", number);
+			/*Save serial_number value.*/
+			if (1 == panel_id) {
+				serial_number1 = serial_number;
+			} else {
+				serial_number0 = serial_number;
+			}
 			break;
 		} else {
 			panel_serial_info.year		= (read[panel_serial_info.reg_index] & 0xF0) >> 0x4;
@@ -579,6 +658,12 @@ int oplus_display_panel_get_serial_number(void *buf) {
 				continue;
 			}
 			ret = scnprintf(panel_rnum->serial_number, PAGE_SIZE, "Get panel serial number: %llx\n", serial_number);
+			/*Save serial_number value.*/
+			if (1 == panel_id) {
+				serial_number1 = serial_number;
+			} else {
+				serial_number0 = serial_number;
+			}
 			break;
 		}
 	}

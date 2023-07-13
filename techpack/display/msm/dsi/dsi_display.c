@@ -1145,6 +1145,7 @@ int dsi_display_check_status(struct drm_connector *connector, void *display,
 	int rc = 0x1, ret;
 	u32 mask;
 	int te_rechecks = 1;
+	char task_com[TASK_COMM_LEN];
 
 	if (!dsi_display || !dsi_display->panel)
 		return -EINVAL;
@@ -1163,9 +1164,13 @@ int dsi_display_check_status(struct drm_connector *connector, void *display,
 		goto release_panel_lock;
 
 #ifdef OPLUS_BUG_STABILITY
-	if (atomic_read(&panel->esd_pending)) {
-		DSI_WARN("Skip the check because esd is pending\n");
-		goto release_panel_lock;
+        get_task_comm(task_com, get_current());
+	if(!strncmp(task_com, "kworker", 7))
+	{
+		if (atomic_read(&panel->esd_pending)) {
+			DSI_WARN("Skip the check because esd is pending\n");
+			goto release_panel_lock;
+		}
 	}
 #endif /* OPLUS_BUG_STABILITY */
 

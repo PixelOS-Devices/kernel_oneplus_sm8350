@@ -272,13 +272,13 @@ int oplus_display_panel_set_hbm(void *buf)
 		(!strcmp(display->panel->oplus_priv.vendor_name, "AMB670YF01"))) {
 		if((hbm_mode > 1) &&(hbm_mode <= 10)) {
 			ret = dsi_display_normal_hbm_on(get_main_display());
-		} else if(hbm_mode == 1) {
+		} else if (hbm_mode == 1) {
 			ret = dsi_display_normal_hbm_on(get_main_display());
-		} else if(hbm_mode == 0) {
+		} else if (hbm_mode == 0) {
 			ret = dsi_display_hbm_off(get_main_display());
 		} else if (hbm_mode == 4095) {
 			ret = oplus_display_panel_hbm_lightspot_check();
-        }
+		}
 	} else {
 		if ((hbm_mode > 1) && (hbm_mode <= 10)) {
 			ret = dsi_display_normal_hbm_on(get_main_display());

@@ -761,6 +761,7 @@
                         "src_byte_clk0", "src_pixel_clk0",
                         "shadow_byte_clk0", "shadow_pixel_clk0";
     oplus,osc-support;
+    oplus,seed-read-back-flag;
     oplus,mdss-dsi-osc-clk-mode0-rate = <180300>;
     oplus,mdss-dsi-osc-clk-mode1-rate = <182300>;
     qcom,mdss-dsi-dc-backlight-level = <520>;

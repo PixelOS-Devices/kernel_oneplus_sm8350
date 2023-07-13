@@ -89,7 +89,7 @@
 	qcom,codec-aux-devs = <&wcd937x_codec>;
 	qcom,msm-mbhc-usbc-audio-supported = <0>;
 	oplus,mbhc-headset-micbias-alwayon = <1>;
-	oppo,speaker-pa = "sia81xx";
+	oplus,speaker-pa = "sia81xx";
 	si,sia81xx-max-num = <1>;
 	si,sia81xx-aux-devs = <&sia81xx_L>;
 	si,sia81xx-aux-devs-prefix = "SpkrMonoL";

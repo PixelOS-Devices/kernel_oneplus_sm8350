@@ -1290,7 +1290,7 @@ int ipa3_setup_sys_pipe(struct ipa_sys_connect_params *sys_in, u32 *clnt_hdl)
 		}
 		atomic_set(&ep->sys->page_recycle_repl->pending, 0);
 		ep->sys->page_recycle_repl->capacity =
-				(ep->sys->rx_pool_sz + 1) * 2;
+				(ep->sys->rx_pool_sz + 1) * 4;
 
 		ep->sys->page_recycle_repl->cache =
 				kcalloc(ep->sys->page_recycle_repl->capacity,
@@ -2059,6 +2059,14 @@ static struct page *ipa3_alloc_page(
 	if (unlikely(!page)) {
 		if (try_lower && p_order > 0) {
 			p_order = p_order - 1;
+
+			// #ifdef OPLUS_BUG_DEBUG
+			if (p_order < IPA_WAN_PAGE_ORDER) {
+				flag &= ~(__GFP_RETRY_MAYFAIL | __GFP_NOWARN);
+			}
+			//pr_err_ratelimited("ipa3_alloc_page: trying lower order, order=%d, flag=%0x\n", p_order, flag);
+			// #endif
+
 			page = __dev_alloc_pages(flag, p_order);
 			if (likely(page))
 				ipa3_ctx->stats.lower_order++;
@@ -2067,7 +2075,6 @@ static struct page *ipa3_alloc_page(
 	*page_order = p_order;
 	return page;
 }
-
 
 static struct ipa3_rx_pkt_wrapper *ipa3_alloc_rx_pkt_page(
 	gfp_t flag, bool is_tmp_alloc)

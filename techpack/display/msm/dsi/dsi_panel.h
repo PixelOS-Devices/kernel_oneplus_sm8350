@@ -228,6 +228,7 @@ struct dsi_panel_oplus_privite {
 	bool dp_support;
 	bool cabc_enabled;
 	bool lp_config_flag;
+	bool seed_read_back_flag;
 	u32 cabc_status;
 	bool dre_enabled;
 	// Add for apollo support
@@ -249,7 +250,6 @@ struct dsi_panel_oplus_privite {
 	bit(7):ultra low power aod
 ********************************************/
 	u32 fp_type;
-	u32 aod_low_brightness_threshold;
 };
 
 struct dsi_panel_oplus_serial_number {
@@ -345,10 +345,6 @@ struct dsi_panel {
 	struct oplus_brightness_alpha *dc_ba_seq;
 	int ba_count;
 	int dc_ba_count;
-	struct oplus_brightness_alpha *aod_high_ba_seq;
-	int aod_high_ba_count;
-	struct oplus_brightness_alpha *aod_low_ba_seq;
-	int aod_low_ba_count;
 	struct dsi_panel_oplus_privite oplus_priv;
 	struct dsi_panel_oplus_serial_number oplus_ser;
 	int panel_id2;

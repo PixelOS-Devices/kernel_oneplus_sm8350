@@ -1,5 +1,5 @@
 //#ifdef OPLUS_BUG_STABILITY
-#include "dsi-panel-oppo21612boe-ili7807s-1080-2400-120fps.dtsi"
+#include "dsi-panel-oplus21612boe-ili7807s-1080-2400-120fps.dtsi"
 #include "dsi-panel-oplus21643-ds-ili7807s-1080-2412-120fps.dtsi"
 #include "charge/ice_charge.dtsi"
 //VDDIO
@@ -51,7 +51,7 @@
 	vddio-supply = <&L12C>;//PM7350C LDO12
 	lab-supply = <&lcdb_ldo_vreg>;
 	ibb-supply = <&lcdb_ncp_vreg>;
-	qcom,dsi-default-panel = <&dsi_oppo21612boe_ili7807s_1080_2400_120fps_vid
+	qcom,dsi-default-panel = <&dsi_oplus21612boe_ili7807s_1080_2400_120fps_vid
 		&dsi_oplus21643_ds_ili7807s_1080_2412_120fps_vid>;
 };
 
@@ -337,7 +337,7 @@
 
 	//add for tp pinctrl
 	/* add pingrp for touchscreen */
-	pmx_ts_int_active_oppo {
+	pmx_ts_int_active_oplus {
 		ts_int_active: ts_int_active {
 			mux {
 				pins = "gpio81";
@@ -353,7 +353,7 @@
 		};
 	};
 
-	pmx_ts_int_suspend_oppo {
+	pmx_ts_int_suspend_oplus {
 		ts_int_suspend1: ts_int_suspend1 {
 			mux {
 				pins = "gpio81";
@@ -370,7 +370,7 @@
 		};
 	};
 
-	pmx_ts_reset_active_oppo {
+	pmx_ts_reset_active_oplus {
 		ctp_ts_reset_poweron: ts_reset_active {
 			mux {
 				pins = "gpio105";
@@ -386,7 +386,7 @@
 		};
 	};
 
-	pmx_ts_reset_suspend_oppo {
+	pmx_ts_reset_suspend_oplus {
 		ctp_ts_reset_poweroff: ts_reset_suspend1 {
 			mux {
 				pins = "gpio105";
@@ -469,7 +469,7 @@
 		oplus,one_gpio_for_three_ic = <1>;
 		silead_6159 {
 			oplus,fp-id = <0>; /* fp id mapping table */
-			vendor-chip = <19>; /* please refer to the struct fp_vendor_t in oppo_fp_commmon.n */
+			vendor-chip = <19>; /* please refer to the struct fp_vendor_t in oplus_fp_commmon.n */
 			eng-menu = "-1,-1"; /* represents SNR, inclination test item in engineer menu, and 0/1 means off/on */
 			chip-name = "S_gsl6159";  /* /proc/fp_id, will be displayed in engineer menu  */
 		};

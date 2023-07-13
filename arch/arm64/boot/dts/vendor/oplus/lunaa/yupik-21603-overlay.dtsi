@@ -94,7 +94,7 @@
 	};
 	
 	/* add pingrp for touchscreen */
-	pmx_ts_int_active_oppo {
+	pmx_ts_int_active_oplus {
 		ts_int_active: ts_int_active {
 			mux {
 				pins = "gpio81";
@@ -110,7 +110,7 @@
 		};
 	};
 
-	pmx_ts_int_suspend_oppo {
+	pmx_ts_int_suspend_oplus {
 		ts_int_suspend1: ts_int_suspend1 {
 			mux {
 				pins = "gpio81";
@@ -127,7 +127,7 @@
 		};
 	};
 
-	pmx_ts_reset_active_oppo {
+	pmx_ts_reset_active_oplus {
 		ts_reset_active: ts_reset_active {
 			mux {
 				pins = "gpio105";
@@ -143,7 +143,7 @@
 		};
 	};
 
-	pmx_ts_reset_suspend_oppo {
+	pmx_ts_reset_suspend_oplus {
 		ts_reset_suspend1: ts_reset_suspend1 {
 			mux {
 				pins = "gpio105";
@@ -611,13 +611,13 @@
 		pinctrl-0 = <&gpio_id2_default>;
 		jiiov_0302 {
 			oplus,fp-id = <0>; /* fp id mapping table */
-			vendor-chip = <23>; /* please refer to the struct fp_vendor_t in oppo_fp_commmon.n */
+			vendor-chip = <23>; /* please refer to the struct fp_vendor_t in oplus_fp_commmon.n */
 			eng-menu = "-1,-1"; /* represents SNR, inclination test item in engineer menu, and 0/1 means off/on */
 			chip-name = "JIIOV_0302";  /* /proc/fp_id, will be displayed in engineer menu  */
 		};
 		goodix_optical_G3S {
 			oplus,fp-id = <1>; /* fp id mapping table */
-			vendor-chip = <11>; /* please refer to the struct fp_vendor_t in oppo_fp_commmon.n */
+			vendor-chip = <11>; /* please refer to the struct fp_vendor_t in oplus_fp_commmon.n */
 			eng-menu = "-1,-1"; /* represents SNR, inclination test item in engineer menu, and 0/1 means off/on */
 			chip-name = "G_OPTICAL_G3S";  /* /proc/fp_id, will be displayed in engineer menu  */
 		};

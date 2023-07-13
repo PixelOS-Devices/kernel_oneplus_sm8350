@@ -60,7 +60,7 @@
                 psensor@0 {
                         sensor-name = <0x10>;//MN78911
                         sensor-index = <1>;
-                        sensor-type = <4>;//OPPO_PROXIMITY
+                        sensor-type = <4>;//OPLUS_PROXIMITY
                         bus-number = <2>;
                         irq-number = <142>;
                         ps-cail-type = <1>;

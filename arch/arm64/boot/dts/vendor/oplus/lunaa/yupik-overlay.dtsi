@@ -89,7 +89,7 @@ delete note  and status = "disabled" to "ok"  add here also, other will meet can
 &reserved_memory {
 		kboot_uboot_logmem: kboot_uboot_logmem@0x9FE00000 {
 			reg = <0x0 0x9FE00000 0x0 0x200000>;
-			compatible = "oppo,xbl_uefi_kbootlog";
+			compatible = "oplus,xbl_uefi_kbootlog";
 			xbluefi-offset = <0x1F7000>;
 			no-map;
 		};

@@ -294,7 +294,7 @@
 };
 
 &battery_charger {
-	//for oppo chg framework:
+	//for oplus chg framework:
 	oplus,chg_ops = "plat-pmic";
 	qcom,smart_charging_screenoff;
 	qcom,input_current_charger_ma = <2000>;

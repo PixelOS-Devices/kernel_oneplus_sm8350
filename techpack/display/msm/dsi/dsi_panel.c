@@ -530,10 +530,13 @@ static int dsi_panel_power_on(struct dsi_panel *panel)
 	if (!strcmp(panel->name,"samsung ams662zs01 fhd cmd mode dsc dsi panel"))
 		mdelay(2);
 #endif
-	rc = dsi_panel_reset(panel);
-	if (rc) {
-		DSI_ERR("[%s] failed to reset panel, rc=%d\n", panel->name, rc);
-		goto error_disable_gpio;
+        if(strcmp(panel->name,"boe nt37705 dsc cmd mode panel"))
+	{
+		rc = dsi_panel_reset(panel);
+		if (rc) {
+			DSI_ERR("[%s] failed to reset panel, rc=%d\n", panel->name, rc);
+			goto error_disable_gpio;
+		}
 	}
 
 #if IS_ENABLED(CONFIG_TOUCHPANEL_OPLUS)
@@ -642,6 +645,9 @@ static int dsi_panel_power_off(struct dsi_panel *panel)
 	}
 //#endif /*OPLUS_FEATURE_TP_BASIC*/
 #endif
+
+	if (!strcmp(panel->name,"boe nt37705 dsc cmd mode panel"))
+		mdelay(2);
 
 	if (gpio_is_valid(panel->reset_config.disp_en_gpio))
 		gpio_set_value(panel->reset_config.disp_en_gpio, 0);
@@ -938,9 +944,8 @@ static int dsi_panel_update_backlight(struct dsi_panel *panel,
 		bl_lvl = (((bl_lvl & 0xff) << 8) | (bl_lvl >> 8));
 
 #ifdef OPLUS_BUG_STABILITY
-	if (get_oplus_display_scene() == OPLUS_DISPLAY_AOD_SCENE) {
-		/* Don't set backlight; just update AoD mode */
-		oplus_update_aod_light_mode_unlock(panel);
+	if ((get_oplus_display_scene() == OPLUS_DISPLAY_AOD_SCENE) && ( bl_lvl == 1)) {
+		pr_err("dsi_cmd AOD mode return bl_lvl:%d\n",bl_lvl);
 		return 0;
 	}
 
@@ -1133,23 +1138,10 @@ static int dsi_panel_update_backlight(struct dsi_panel *panel,
 					pr_err("send DSI_CMD_HBM_ENTER_SWITCH fail\n");
 			}
 		}
-		else if (!strcmp(panel->oplus_priv.vendor_name, "AMS662ZS01")) {
-			if (bl_lvl > PANEL_MAX_NOMAL_BRIGHTNESS) {
-				if (enable_global_hbm_flags == 0) {
-					rc = dsi_panel_tx_cmd_set(panel, DSI_CMD_HBM_ENTER_SWITCH);
-					enable_global_hbm_flags = 1;
-				}
-			}
-			else {
-				if(enable_global_hbm_flags == 1) {
-					rc = dsi_panel_tx_cmd_set(panel, DSI_CMD_HBM_EXIT_SWITCH);
-					enable_global_hbm_flags = 0;
-				}
-			}
-		} else if(!strcmp(panel->oplus_priv.vendor_name, "AMB670YF01")) {
+		else if(!strcmp(panel->oplus_priv.vendor_name, "AMB670YF01")) {
 				oplus_display_panel_backlight_mapping(panel, &bl_lvl);
 		}
-		else {
+		else if(strcmp(panel->name,"tianma ili7838a dsc cmd mode panel")) {
 			if (bl_lvl > panel->bl_config.bl_normal_max_level)
 				payload[1] = 0xE0;
 			else
@@ -5444,6 +5436,13 @@ int dsi_panel_prepare(struct dsi_panel *panel)
 	}
 
 	mutex_lock(&panel->panel_lock);
+        if(!strcmp(panel->name,"boe nt37705 dsc cmd mode panel")) {
+		rc = dsi_panel_reset(panel);
+		if (rc) {
+			DSI_ERR("[%s] failed to reset panel, rc=%d\n", panel->name, rc);
+			goto error;
+		}
+	}
 
 	if (panel->lp11_init) {
 		rc = dsi_panel_power_on(panel);

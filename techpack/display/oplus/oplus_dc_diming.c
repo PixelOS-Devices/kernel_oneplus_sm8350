@@ -221,7 +221,7 @@ static struct oplus_brightness_alpha brightness_seed_alpha_lut_dc[] = {
 	{260, 0x00},
 };
 
-/*Jiasong.ZhongPSW.MM.Display.LCD.Stable,2020-09-17 add for DC backlight */
+/* add for DC backlight */
 int dsi_panel_parse_oplus_dc_config(struct dsi_panel *panel)
 {
 	int rc = 0;
