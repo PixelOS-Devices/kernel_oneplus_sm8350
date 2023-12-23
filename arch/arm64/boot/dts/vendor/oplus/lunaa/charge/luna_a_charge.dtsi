@@ -359,17 +359,25 @@
 
 &usb2_phy0 {
 	qcom,param-override-seq =
-			<0x07 0x6c	
+			<0x07 0x6c
 			 0x0b 0x70
 			 0x04 0x74
 			 0x00 0x78>;
 
 	qcom,param-override-seq-host =
-			<0x07 0x6c	
+			<0x07 0x6c
 			 0x0b 0x70
 			 0x04 0x74
 			 0x00 0x78>;
 };
+
+//#ifdef OPLUS_FEATURE_CHG_BASIC
+
+&pm8350c_tz {
+	qcom,need_check_ref_byp;
+};
+
+//#endif
 
 &thermal_zones {
         charger-therm-usr {

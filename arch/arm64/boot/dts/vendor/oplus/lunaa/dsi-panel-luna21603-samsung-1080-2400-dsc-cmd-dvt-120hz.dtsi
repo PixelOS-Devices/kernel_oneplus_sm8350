@@ -38,7 +38,7 @@
         qcom,mdss-dsi-panel-blackness-level = <1023>;
         qcom,mdss-pan-physical-width-dimension = <67>;
         qcom,mdss-pan-physical-height-dimension = <149>;
-        //qcom,esd-check-enabled;
+        qcom,esd-check-enabled;
         qcom,mdss-dsi-panel-status-check-mode = "reg_read";
         qcom,mdss-dsi-panel-status-command = [06 01 00 01 05 00 02 0A 00
                             06 01 00 01 05 00 02 03 00
@@ -268,23 +268,29 @@
                 qcom,mdss-dsi-seed-1-command = [
                     /* SEED CRC Setting */
                     39 01 00 00 00 00 03 F0 5A 5A
+                    39 01 00 00 00 00 04 72 2C 21 00
+                    39 01 00 00 00 00 02 F8 00
                     39 01 00 00 00 00 02 5D 06      /* SRGB */
                     /* SEED CRC ON */
                     39 01 00 00 00 00 02 62 00
                     /* SEED CRC Adobe */
                     39 01 00 00 00 00 03 B0 01 62
                     39 01 00 00 00 00 16 62 B0 02 06 3F D3 15 05 09 B0 48 F2 DC C4 07 C8 E9 E9 1D FD F5 E1
+                    39 01 00 00 14 00 04 72 2C 01 00
                     39 01 00 00 00 00 03 F0 A5 A5
                 ];
                 qcom,mdss-dsi-seed-2-command = [
                     /* SEED CRC Setting */
                     39 01 00 00 00 00 03 F0 5A 5A
+                    39 01 00 00 00 00 04 72 2C 21 00
+                    39 01 00 00 00 00 02 F8 00
                     39 01 00 00 00 00 02 5D 46      /* ADOBE */
                     /* SEED CRC ON */
                     39 01 00 00 00 00 02 62 00
                     /* SEED CRC Adobe */
                     39 01 00 00 00 00 03 B0 16 62
                     39 01 00 00 00 00 16 62 E0 00 06 00 FF 00 00 00 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF
+                    39 01 00 00 14 00 04 72 2C 01 00
                     39 01 00 00 00 00 03 F0 A5 A5
                 ];
                 qcom,mdss-dsi-hbm-enter-switch-command = [
@@ -401,13 +407,13 @@
                 qcom,mdss-dsi-panel-framerate = <60>;
                 qcom,mdss-dsi-panel-width = <1080>;
                 qcom,mdss-dsi-panel-height = <2400>;
-                qcom,mdss-dsi-h-front-porch = <6>;
-                qcom,mdss-dsi-h-back-porch = <6>;
-                qcom,mdss-dsi-h-pulse-width = <2>;
+                qcom,mdss-dsi-h-front-porch = <50>;
+                qcom,mdss-dsi-h-back-porch = <40>;
+                qcom,mdss-dsi-h-pulse-width = <10>;
                 qcom,mdss-dsi-h-sync-skew = <0>;
-                qcom,mdss-dsi-v-back-porch = <20>;
-                qcom,mdss-dsi-v-front-porch = <20>;
-                qcom,mdss-dsi-v-pulse-width = <20>;
+                qcom,mdss-dsi-v-back-porch = <10>;
+                qcom,mdss-dsi-v-front-porch = <21>;
+                qcom,mdss-dsi-v-pulse-width = <2>;
                 qcom,mdss-dsi-h-left-border = <0>;
                 qcom,mdss-dsi-h-right-border = <0>;
                 qcom,mdss-dsi-v-top-border = <0>;
@@ -610,23 +616,29 @@
                 qcom,mdss-dsi-seed-1-command = [
                     /* SEED CRC Setting */
                     39 01 00 00 00 00 03 F0 5A 5A
+                    39 01 00 00 00 00 04 72 2C 21 00
+                    39 01 00 00 00 00 02 F8 00
                     39 01 00 00 00 00 02 5D 06        /* SRGB */
                     /* SEED CRC ON */
                     39 01 00 00 00 00 02 62 00
                     /* SEED CRC Adobe */
                     39 01 00 00 00 00 03 B0 01 62
                     39 01 00 00 00 00 16 62 B0 02 06 3F D3 15 05 09 B0 48 F2 DC C4 07 C8 E9 E9 1D FD F5 E1
+                    39 01 00 00 14 00 04 72 2C 01 00
                     39 01 00 00 00 00 03 F0 A5 A5
                 ];
                 qcom,mdss-dsi-seed-2-command = [
                     /* SEED CRC Setting */
                     39 01 00 00 00 00 03 F0 5A 5A
+                    39 01 00 00 00 00 04 72 2C 21 00
+                    39 01 00 00 00 00 02 F8 00
                     39 01 00 00 00 00 02 5D 46        /* ADOBE */
                     /* SEED CRC ON */
                     39 01 00 00 00 00 02 62 00
                     /* SEED CRC Adobe */
                     39 01 00 00 00 00 03 B0 16 62
                     39 01 00 00 00 00 16 62 E0 00 06 00 FF 00 00 00 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF
+                    39 01 00 00 14 00 04 72 2C 01 00
                     39 01 00 00 00 00 03 F0 A5 A5
                 ];
                 qcom,mdss-dsi-hbm-enter-switch-command = [
@@ -821,7 +833,7 @@
              qcom,default-topology-index = <0>;
         };
         timing@1 {
-                 qcom,mdss-dsi-panel-phy-timings = [00 1D 07 07 17 22 07 07 08 02 04 00 19 0C];
+                 qcom,mdss-dsi-panel-phy-timings = [00 1D 07 07 17 16 07 07 08 02 04 00 19 0C];
                  qcom,display-topology = <1 1 1>,<2 2 1>;
                  qcom,default-topology-index = <0>;
         };

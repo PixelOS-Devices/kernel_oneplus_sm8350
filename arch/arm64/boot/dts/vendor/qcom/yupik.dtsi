@@ -35,7 +35,7 @@
 	#size-cells = <2>;
 
 	chosen {
-		bootargs = "log_buf_len=256K earlycon=msm_geni_serial,0x994000 rcupdate.rcu_expedited=1 rcu_nocbs=0-7 kpti=off noirqdebug quiet";
+		bootargs = "log_buf_len=2M earlycon=msm_geni_serial,0x994000 rcupdate.rcu_expedited=1 rcu_nocbs=0-7 kpti=off noirqdebug quiet";
 	};
 
 	memory { device_type = "memory"; reg = <0 0 0 0>; };
@@ -495,7 +495,7 @@
 		alloc-ranges = <0x0 0x00000000 0x0 0xffffffff>;
 		reusable;
 		alignment = <0x0 0x400000>;
-		size = <0x0 0x2000000>;
+		size = <0x0 0x6000000>;
 		linux,cma-default;
 	};
 
@@ -2332,21 +2332,7 @@
 				<DCC_READ 0x8ab04ac 1 0>,
 				<DCC_READ 0x8ab04b0 1 0>,
 				<DCC_READ 0x8ab04b4 1 0>,
-				<DCC_READ 0x8ab04b8 1 0>,
-				<DCC_READ 0xaa10504 1 0>,
-				<DCC_READ 0xaa10508 1 0>,
-				<DCC_READ 0xaa10510 1 0>,
-				<DCC_READ 0xaa10520 1 0>,
-				<DCC_READ 0xaa10524 1 0>,
-				<DCC_READ 0xaa10528 1 0>,
-				<DCC_READ 0xaa1052c 1 0>,
-				<DCC_READ 0xaa10530 1 0>,
-				<DCC_READ 0xaa10534 1 0>,
-				<DCC_READ 0xaa10538 1 0>,
-				<DCC_READ 0xaa1053c 1 0>,
-				<DCC_READ 0xaa10300 1 0>,
-				<DCC_READ 0xaa10010 1 0>,
-				<DCC_READ 0xaa10020 1 0>;
+				<DCC_READ 0x8ab04b8 1 0>;
 		};
 	};
 
@@ -2703,7 +2689,6 @@
 		clock-names = "xo", "alternate";
 
 		qcom,lut-row-size = <4>;
-		qcom,no-accumulative-counter;
 		qcom,skip-enable-check;
 
 		interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>,
@@ -4100,6 +4085,7 @@
 				qcom,intents = <0x800  5
 						0x2000 3
 						0x4400 2>;
+				qcom,non-wake-svc = <400>;
 			};
 
 			qcom,adsp_glink_ssr {

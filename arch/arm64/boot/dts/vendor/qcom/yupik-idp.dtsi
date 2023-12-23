@@ -398,3 +398,4 @@
 		novatek,trusted-touch-io-sizes = <0x1000 0x1000 0x1000 0x1000 0x1000 0x4000>;
 	};
 };
+#include "camera/yupik-camera-sensor-idp.dtsi"
