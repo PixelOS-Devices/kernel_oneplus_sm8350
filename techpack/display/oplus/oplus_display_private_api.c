@@ -1990,13 +1990,14 @@ static int oplus_boe_data_dimming_process_unlock(int brightness, int enable)
 	if (!panel->is_hbm_enabled && oplus_datadimming_vblank_count != 0) {
 		drm_crtc_wait_one_vblank(dsi_connector->state->crtc);
 #if defined(OPLUS_FEATURE_PXLW_IRIS5)
-	if (iris_is_chip_supported() && iris_is_pt_mode(panel))
-		rc = iris_update_backlight(1, brightness);
-	else
+	    if (iris_is_chip_supported() && iris_is_pt_mode(panel)) {
+		    rc = iris_update_backlight(1, brightness);
+	    } else {
 #endif
 		rc = mipi_dsi_dcs_set_display_brightness(mipi_device, brightness);
 		drm_crtc_wait_one_vblank(dsi_connector->state->crtc);
-	}
+            }
+        }
 
 	/* enable the clk vote for CMD mode panels */
 	if (display->config.panel_mode == DSI_OP_CMD_MODE) {
