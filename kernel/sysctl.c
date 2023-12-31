@@ -147,8 +147,6 @@ static int six_hundred_forty_kb = 640 * 1024;
 static int __maybe_unused max_kswapd_threads = MAX_KSWAPD_THREADS;
 
 #ifdef CONFIG_SCHED_WALT
-static int neg_three = -3;
-static int three = 3;
 static int fifty = 50;
 static int two_hundred_fifty_five = 255;
 const int sched_user_hint_max = 1000;
@@ -425,15 +423,6 @@ static struct ctl_table kern_table[] = {
 		.proc_handler	= walt_proc_group_thresholds_handler,
 		.extra1		= SYSCTL_ZERO,
 		.extra2		= &sysctl_sched_group_upmigrate_pct,
-	},
-	{
-		.procname	= "sched_boost",
-		.data		= &sysctl_sched_boost,
-		.maxlen		= sizeof(unsigned int),
-		.mode		= 0644,
-		.proc_handler	= sched_boost_handler,
-		.extra1		= &neg_three,
-		.extra2		= &three,
 	},
 	{
 		.procname	= "sched_conservative_pl",
