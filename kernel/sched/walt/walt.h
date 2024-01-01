@@ -204,9 +204,13 @@ static inline unsigned int walt_nr_rtg_high_prio(int cpu)
 	return cpu_rq(cpu)->wrq.walt_stats.nr_rtg_high_prio_tasks;
 }
 
-extern inline void core_ctl_init(void) { }
+extern int core_ctl_init(void);
 
-static inline void cpu_boost_init(void) { }
+#ifdef CONFIG_CPU_FREQ
+extern int cpu_boost_init(void);
+#else
+static inline int cpu_boost_init(void) { }
+#endif
 
 #else /* CONFIG_SCHED_WALT */
 
